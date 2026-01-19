@@ -15,16 +15,12 @@ def getCameraOutput(source = 0, webRTC_connection = None, local_camera = 0):
         case 0:            
             ret, frame = cam.read() 
         case 1:
-            print("WebRTC Camera")
-            webRTC_connection.video.switchVideoChannel(True)
-            webRTC_connection.datachannel.disableTrafficSaving(True)
             webRTC_connection.video.add_track_callback(frame)
-            webRTC_connection.video.set_buffer_size(1)
-            webRTC_connection.datachannel.set_decoder(decoder_type="libvoxel")
         case 2:
             print("todo")
     
     return frame
+
 
 cam = cv2.VideoCapture(0)
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
@@ -37,7 +33,6 @@ while True:
     new_frame_time = time.time()
     
     frame = getCameraOutput()
-    print(time.time())
     if time.time() > one_sec_timer+1:
         one_sec_timer = time.time()
         fps = 1/(new_frame_time-prev_frame_time)
